@@ -1,7 +1,8 @@
 version: 2.1
 executors:
   docker-publisher:
-    environment:      
+    environment:
+      IMAGE_NAME: orangesys/alpine-victoriametrics
       ALPINE_VER: 3.10.3
       VM_MAJOR_VER: v3.10
       VM_VER: v1.30.3
@@ -17,10 +18,10 @@ jobs:
           name: Build Docker image
           command: |
             wget http://dl-5.alpinelinux.org/alpine/${VM_MAJOR_VER}/releases/x86_64/alpine-minirootfs-${ALPINE_VER}-x86_64.tar.gz
-            docker build --build-arg VM_VER=${VM_VER} --build-arg ALPINE_VER=${ALPINE_VER} -t ${CIRCLE_PROJECT_REPONAME}:${VM_VER} .
+            docker build --build-arg VM_VER=${VM_VER} --build-arg ALPINE_VER=${ALPINE_VER} -t ${IMAGE_NAME}:${VM_VER} .
       - run:
           name: Archive Docker image
-          command: docker save -o image.tar ${CIRCLE_PROJECT_REPONAME}:${VM_VER}
+          command: docker save -o image.tar ${IMAGE_NAME}:${VM_VER}
       - persist_to_workspace:
           root: .
           paths:
@@ -38,9 +39,9 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-            docker tag ${CIRCLE_PROJECT_REPONAME}:${VM_VER} $CIRCLE_PROJECT_REPONAME:latest
-            docker push $CIRCLE_PROJECT_REPONAME:latest
-            docker push ${CIRCLE_PROJECT_REPONAME}:${VM_VER}
+            docker tag ${IMAGE_NAME}:${VM_VER} $IMAGE_NAME:latest
+            docker push $IMAGE_NAME:latest
+            docker push ${IMAGE_NAME}:${VM_VER}
 
 workflows:
   version: 2
