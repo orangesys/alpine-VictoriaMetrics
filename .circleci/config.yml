@@ -16,6 +16,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
+            wget http://dl-5.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.3-x86_64.tar.gz
             docker build --build-arg VM_VER=${VM_VER} --build-arg ALPINE_VER=${ALPINE_VER} -t ${IMAGE_NAME}:${VM_VER} .
       - run:
           name: Archive Docker image
