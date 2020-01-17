@@ -3,9 +3,9 @@ executors:
   docker-publisher:
     environment:
       IMAGE_NAME: orangesys/alpine-victoriametrics
-      ALPINE_VER: 3.11.0
+      ALPINE_VER: 3.11.3
       VM_MAJOR_VER: v3.11
-      VM_VER: v1.31.2
+      VM_VER: v1.32.3
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
